@@ -7,6 +7,9 @@ dotenv.config();
 const app: Application = express();
 const port = process.env.PORT;
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/", route);
 
 app.listen(port, () => {
