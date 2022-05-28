@@ -6,6 +6,7 @@ import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
+import { StoreValidator } from "../validators/StoreValidator";
 
 const router = Router();
 
@@ -22,7 +23,7 @@ router.delete("/categories/:id", CategoryController.delete);
 
 // Store
 router.get("/stores", StoreController.get);
-router.post("/stores", StoreController.store);
+router.post("/stores", StoreValidator, StoreController.store);
 router.get("/stores/:id", StoreController.show);
 router.put("/stores/:id", StoreController.update);
 router.delete("/stores/:id", StoreController.delete);
