@@ -52,9 +52,9 @@ model Product{
   id          String    @id @default(cuid())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  store       Store     @relation(fields: [storeId], references: [id])
+  store       Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId     String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   name        String
   stock       Int

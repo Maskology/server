@@ -6,7 +6,8 @@ import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
-import { StoreValidator } from "../validators/StoreValidator";
+import { ValidateProduct } from "../validators/ProductValidator";
+import { ValidateStore } from "../validators/StoreValidator";
 
 const router = Router();
 
@@ -23,16 +24,16 @@ router.delete("/categories/:id", CategoryController.delete);
 
 // Store
 router.get("/stores", StoreController.get);
-router.post("/stores", StoreValidator, StoreController.store);
+router.post("/stores", ValidateStore, StoreController.store);
 router.get("/stores/:id", StoreController.show);
-router.put("/stores/:id", StoreController.update);
+router.put("/stores/:id", ValidateStore, StoreController.update);
 router.delete("/stores/:id", StoreController.delete);
 
 //Product
 router.get("/products", ProductController.get);
-router.post("/products", ProductController.store);
+router.post("/products", ValidateProduct, ProductController.store);
 router.get("/products/:id", ProductController.show);
-router.put("/products/:id", ProductController.update);
+router.put("/products/:id", ValidateProduct, ProductController.update);
 router.delete("/products/:id", ProductController.delete);
 
 export default router;
