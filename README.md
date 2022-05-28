@@ -1,4 +1,4 @@
-# Welcome to maskology-api 👋
+# Welcome to maskology-api 👹
 
 [![Twitter: schias12](https://img.shields.io/twitter/follow/schias12.svg?style=social)](https://twitter.com/schias12)
 
@@ -27,4 +27,3 @@ npm run dev
 
 Give a ⭐️ if this project helped you!
 
----
