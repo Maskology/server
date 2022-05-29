@@ -5,7 +5,7 @@ export const secret = process.env.JWTSECRET ?? "123456789secret";
 export interface TokenData {
   name: string;
   email: string;
-  contact: string;
+  contact?: string;
 }
 
 export const generateToken = (payload: TokenData): string => {

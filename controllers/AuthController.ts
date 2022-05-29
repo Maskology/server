@@ -14,10 +14,6 @@ export default class AuthController {
         where: { email },
       });
 
-      const admin = await prisma.admin.findUnique({
-        where: { email },
-      });
-
       if (user) {
         if (await argon2.verify(user.password, password)) {
           return res.status(200).json({
@@ -32,7 +28,27 @@ export default class AuthController {
           return res.status(401).json({ message: "Invalid email or password" });
         }
       } else {
-        return res.status(404).json({ message: "User not registered" });
+        const admin = await prisma.admin.findUnique({
+          where: { email },
+        });
+
+        if (admin) {
+          if (await argon2.verify(admin.password, password)) {
+            return res.status(200).json({
+              user,
+              token: generateToken({
+                name: admin.name,
+                email: admin.email,
+              }),
+            });
+          } else {
+            return res
+              .status(401)
+              .json({ message: "Invalid email or password" });
+          }
+        } else {
+          return res.status(404).json({ message: "User not registered" });
+        }
       }
     } catch (error) {
       next(error);
