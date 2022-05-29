@@ -5,9 +5,34 @@ const prisma = new PrismaClient();
 
 export default class CategoryController {
   static async get(req: Request, res: Response) {
-    const categories = await prisma.category.findMany();
+    const q = req.query;
+    let limit = 5;
+    let page = 1;
 
-    return res.status(200).json(categories);
+    if (q.page && q.limit) {
+      page = parseInt(q.page!.toString());
+      limit = parseInt(q.limit!.toString());
+    }
+
+    const startIndex = (page - 1) * limit;
+
+    const totalData = await prisma.category.count();
+    const totalPage = Math.ceil(totalData / limit);
+
+    const result = await prisma.category.findMany({
+      take: limit,
+      skip: startIndex,
+    });
+
+    return res.status(200).json({
+      meta: {
+        total: totalData,
+        totalPage: totalPage,
+        page: page,
+        lastPage: totalPage,
+      },
+      data: result,
+    });
   }
 
   static async store(req: Request, res: Response, next: NextFunction) {
