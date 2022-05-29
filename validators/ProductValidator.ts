@@ -1,9 +1,21 @@
 import { body, validationResult } from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
-// name, imageUrl, author, source
+// storeId, categoryId, name, imageUrl, stock, price
 
-export const ValidateCategory = [
+export const ValidateProduct = [
+  body("storeId")
+    .isString()
+    .bail()
+    .notEmpty()
+    .withMessage("storeId can't be empty")
+    .bail(),
+  body("categoryId")
+    .isString()
+    .bail()
+    .notEmpty()
+    .withMessage("categoryId can't be empty")
+    .bail(),
   body("name")
     .isString()
     .bail()
@@ -16,17 +28,18 @@ export const ValidateCategory = [
     .notEmpty()
     .withMessage("imageUrl can't be empty")
     .bail(),
-  body("author")
-    .isString()
+  body("stock")
+    .isInt({ min: 0 })
     .bail()
     .notEmpty()
-    .withMessage("author can't be empty")
-    .bail(),
-  body("source")
-    .isString()
+    .withMessage("stock can't be empty")
+    .bail()
+    .toInt(),
+  body("price")
+    .isInt({ min: 0 })
     .bail()
     .notEmpty()
-    .withMessage("source can't be empty")
+    .withMessage("price can't be empty")
     .bail(),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

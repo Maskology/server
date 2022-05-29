@@ -28,36 +28,42 @@ model Admin {
 }
 
 model Store{
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  name      String
-  contact   String
-  desc      String
-  email     String
-  password  String
-  product   Product[]
+  id                  String    @id @default(cuid())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  name                String
+  contact             String
+  desc                String
+  email               String
+  password            String
+  profilePictureUrl   String
+  backgroundUrl       String
+  product             Product[]
 }
 
 model Category{
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  name      String
-  detail    String
-  product   Product[]
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  name        String
+  imageUrl    String
+  author      String
+  source      String
+  detail      String
+  product     Product[]
 }
 
 model Product{
   id          String    @id @default(cuid())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  store       Store     @relation(fields: [storeId], references: [id])
+  store       Store     @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId     String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String
   name        String
-  stock       Int
   imageUrl    String
+  price       String
+  stock       Int
   desc        String
 }

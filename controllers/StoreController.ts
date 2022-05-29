@@ -6,9 +6,34 @@ const prisma = new PrismaClient();
 
 export default class StoreController {
   static async get(req: Request, res: Response) {
-    const stores = await prisma.store.findMany();
+    const q = req.query;
+    let limit = 5;
+    let page = 1;
 
-    return res.status(200).json(stores);
+    if (q.page && q.limit) {
+      page = parseInt(q.page!.toString());
+      limit = parseInt(q.limit!.toString());
+    }
+
+    const startIndex = (page - 1) * limit;
+
+    const totalData = await prisma.store.count();
+    const totalPage = Math.ceil(totalData / limit);
+
+    const result = await prisma.store.findMany({
+      take: limit,
+      skip: startIndex,
+    });
+
+    return res.status(200).json({
+      meta: {
+        total: totalData,
+        totalPage: totalPage,
+        page: page,
+        lastPage: totalPage,
+      },
+      data: result,
+    });
   }
 
   static async store(req: Request, res: Response, next: NextFunction) {

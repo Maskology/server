@@ -5,9 +5,37 @@ const prisma = new PrismaClient();
 
 export default class ProductController {
   static async get(req: Request, res: Response) {
-    const result = await prisma.product.findMany();
+    const q = req.query;
+    let limit = 5;
+    let page = 1;
 
-    return res.status(200).json(result);
+    if (q.page && q.limit) {
+      page = parseInt(q.page!.toString());
+      limit = parseInt(q.limit!.toString());
+    }
+
+    const startIndex = (page - 1) * limit;
+
+    const totalData = await prisma.product.count();
+    const totalPage = Math.ceil(totalData / limit);
+
+    const result = await prisma.product.findMany({
+      take: limit,
+      skip: startIndex,
+      include: {
+        category: true,
+      },
+    });
+
+    return res.status(200).json({
+      meta: {
+        total: totalData,
+        totalPage: totalPage,
+        page: page,
+        lastPage: totalPage,
+      },
+      data: result,
+    });
   }
 
   static async store(req: Request, res: Response, next: NextFunction) {
@@ -28,6 +56,9 @@ export default class ProductController {
     const result = await prisma.product.findUnique({
       where: {
         id: req.params.id,
+      },
+      include: {
+        category: true,
       },
     });
 
