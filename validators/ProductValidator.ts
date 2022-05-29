@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
-// storeId, categoryId, name, imageUrl, stock
+// storeId, categoryId, name, imageUrl, stock, price
 
 export const ValidateProduct = [
   body("storeId")
@@ -23,7 +23,7 @@ export const ValidateProduct = [
     .withMessage("Name can't be empty")
     .bail(),
   body("imageUrl")
-    .isString()
+    .isURL()
     .bail()
     .notEmpty()
     .withMessage("imageUrl can't be empty")
@@ -35,6 +35,12 @@ export const ValidateProduct = [
     .withMessage("stock can't be empty")
     .bail()
     .toInt(),
+  body("price")
+    .isInt({ min: 0 })
+    .bail()
+    .notEmpty()
+    .withMessage("price can't be empty")
+    .bail(),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

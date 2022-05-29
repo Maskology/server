@@ -1,6 +1,8 @@
 import { body, validationResult } from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
+// name, contact, email, password, profilePictureUrl, backgroundUrl
+
 export const ValidateStore = [
   body("name")
     .isString()
@@ -26,6 +28,18 @@ export const ValidateStore = [
     .bail()
     .notEmpty()
     .withMessage("Password can't be empty")
+    .bail(),
+  body("profilePictureUrl")
+    .isURL()
+    .bail()
+    .notEmpty()
+    .withMessage("profilePictureUrl can't be empty")
+    .bail(),
+  body("backgroundUrl")
+    .isURL()
+    .bail()
+    .notEmpty()
+    .withMessage("backgroundUrl can't be empty")
     .bail(),
   (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
