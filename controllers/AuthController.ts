@@ -21,7 +21,6 @@ export default class AuthController {
               id: user.id,
               name: user.name,
               email: user.email,
-              contact: user.contact,
               role: "store",
             },
             token: generateToken({
@@ -41,7 +40,12 @@ export default class AuthController {
         if (admin) {
           if (await argon2.verify(admin.password, password)) {
             return res.status(200).json({
-              user: { ...admin, role: "admin" },
+              user: {
+                id: admin.id,
+                name: admin.name,
+                email: admin.email,
+                role: "admin",
+              },
               token: generateToken({
                 name: admin.name,
                 email: admin.email,
