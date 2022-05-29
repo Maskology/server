@@ -36,14 +36,14 @@ export default class CategoryController {
   }
 
   static async store(req: Request, res: Response, next: NextFunction) {
-    const { name, detail } = req.body;
+    const { ...category } = req.body;
 
     try {
-      const category = await prisma.category.create({
-        data: { name, detail },
+      const result = await prisma.category.create({
+        data: { ...category },
       });
 
-      return res.status(201).json(category);
+      return res.status(201).json(result);
     } catch (error) {
       next(error);
     }

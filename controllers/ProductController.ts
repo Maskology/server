@@ -22,6 +22,9 @@ export default class ProductController {
     const result = await prisma.product.findMany({
       take: limit,
       skip: startIndex,
+      include: {
+        category: true,
+      },
     });
 
     return res.status(200).json({
@@ -53,6 +56,9 @@ export default class ProductController {
     const result = await prisma.product.findUnique({
       where: {
         id: req.params.id,
+      },
+      include: {
+        category: true,
       },
     });
 
