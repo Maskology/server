@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
 
+import AuthController from "../controllers/AuthController";
 import CategoryController from "../controllers/CategoryController";
 import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
@@ -14,6 +15,9 @@ const router = Router();
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "API OK!" });
 });
+
+//Auth
+router.post("/login", AuthController.login);
 
 // Category
 router.get("/categories", CategoryController.get);
