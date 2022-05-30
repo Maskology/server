@@ -24,6 +24,7 @@ export default class ProductController {
       skip: startIndex,
       include: {
         category: true,
+        store: true,
       },
     });
 
@@ -59,6 +60,7 @@ export default class ProductController {
       },
       include: {
         category: true,
+        store: true,
       },
     });
 
