@@ -65,4 +65,20 @@ export default class AuthController {
       next(error);
     }
   }
+
+  static async register(req: Request, res: Response, next: NextFunction) {
+    const { password, ...admin } = req.body;
+
+    const hashPassword = await argon2.hash(password);
+
+    try {
+      const result = await prisma.admin.create({
+        data: { password: hashPassword, ...admin },
+      });
+
+      return res.status(201).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 }

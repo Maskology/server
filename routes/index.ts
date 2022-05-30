@@ -20,6 +20,12 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 //Auth
 router.post("/login", AuthController.login);
+router.post(
+  "/register",
+  authenticate,
+  adminAuthorization,
+  AuthController.register
+);
 
 // Category
 router.get("/categories", CategoryController.get);
