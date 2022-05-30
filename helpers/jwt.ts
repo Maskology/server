@@ -6,6 +6,7 @@ export interface TokenData {
   name: string;
   email: string;
   contact?: string;
+  role: "ADMIN" | "STORE";
 }
 
 export const generateToken = (payload: TokenData): string => {
