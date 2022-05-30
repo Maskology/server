@@ -10,6 +10,8 @@ import { ValidateCategory } from "../validators/CategoryValidator";
 import { ValidateProduct } from "../validators/ProductValidator";
 import { ValidateStore } from "../validators/StoreValidator";
 
+import { adminAuthorization, authenticate } from "../middleware/auth";
+
 const router = Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -21,23 +23,50 @@ router.post("/login", AuthController.login);
 
 // Category
 router.get("/categories", CategoryController.get);
-router.post("/categories", ValidateCategory, CategoryController.store);
+router.post(
+  "/categories",
+  ValidateCategory,
+  authenticate,
+  adminAuthorization,
+  CategoryController.store
+);
 router.get("/categories/:id", CategoryController.show);
-router.put("/categories/:id", ValidateCategory, CategoryController.update);
-router.delete("/categories/:id", CategoryController.delete);
+router.put(
+  "/categories/:id",
+  ValidateCategory,
+  authenticate,
+  adminAuthorization,
+  CategoryController.update
+);
+router.delete(
+  "/categories/:id",
+  authenticate,
+  adminAuthorization,
+  CategoryController.delete
+);
 
 // Store
 router.get("/stores", StoreController.get);
-router.post("/stores", ValidateStore, StoreController.store);
+router.post("/stores", ValidateStore, authenticate, StoreController.store);
 router.get("/stores/:id", StoreController.show);
-router.put("/stores/:id", ValidateStore, StoreController.update);
-router.delete("/stores/:id", StoreController.delete);
+router.put("/stores/:id", ValidateStore, authenticate, StoreController.update);
+router.delete("/stores/:id", authenticate, StoreController.delete);
 
 //Product
 router.get("/products", ProductController.get);
-router.post("/products", ValidateProduct, ProductController.store);
+router.post(
+  "/products",
+  ValidateProduct,
+  authenticate,
+  ProductController.store
+);
 router.get("/products/:id", ProductController.show);
-router.put("/products/:id", ValidateProduct, ProductController.update);
-router.delete("/products/:id", ProductController.delete);
+router.put(
+  "/products/:id",
+  ValidateProduct,
+  authenticate,
+  ProductController.update
+);
+router.delete("/products/:id", authenticate, ProductController.delete);
 
 export default router;

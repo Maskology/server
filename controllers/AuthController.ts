@@ -21,12 +21,12 @@ export default class AuthController {
               id: user.id,
               name: user.name,
               email: user.email,
-              role: "store",
             },
             token: generateToken({
               name: user.name,
               email: user.email,
               contact: user.contact,
+              role: "STORE",
             }),
           });
         } else {
@@ -49,6 +49,7 @@ export default class AuthController {
               token: generateToken({
                 name: admin.name,
                 email: admin.email,
+                role: "ADMIN",
               }),
             });
           } else {

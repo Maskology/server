@@ -15,3 +15,16 @@ export const authenticate = (
     res.sendStatus(401);
   }
 };
+
+export const adminAuthorization = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userData = res.locals.userData;
+  if (userData.role === "ADMIN") {
+    next();
+  } else {
+    res.status(403).json({ message: "Forbidden access" });
+  }
+};
