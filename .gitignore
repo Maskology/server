@@ -4,3 +4,4 @@ node_modules
 model
 model.zip
 tmp
+dist
