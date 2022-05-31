@@ -3,7 +3,7 @@ import * as tf from "@tensorflow/tfjs-node";
 
 export default class ModelController {
   static async predict({ file, path }: { file: any; path: string }) {
-    const IMG_SIZE = [128, 128] as [number, number];
+    const IMG_SIZE = [280, 280] as [number, number];
 
     let pattern = /image\/(jpeg|png|jpg)/;
     if (!pattern.test(file.mimetype)) {
@@ -21,7 +21,6 @@ export default class ModelController {
       "bujuh",
       "dalem",
       "keras",
-      "rangda",
       "sidakarya",
       "tua",
     ].sort();
@@ -40,7 +39,7 @@ export default class ModelController {
     try {
       const result = await ModelController.predict({
         file: req.file,
-        path: process.env.MODEL_URL!,
+        path: process.env.MODEL_PATH!,
       });
       return res.status(200).json({ result });
     } catch (error: any) {
