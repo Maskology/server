@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
+import multer from "multer";
 
 import AuthController from "../controllers/AuthController";
 import CategoryController from "../controllers/CategoryController";
 import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
+import ModelController from "../controllers/ModelController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
 import { ValidateProduct } from "../validators/ProductValidator";
@@ -13,6 +15,9 @@ import { ValidateStore } from "../validators/StoreValidator";
 import { adminAuthorization, authenticate } from "../middleware/auth";
 
 const router = Router();
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "API OK!" });
@@ -74,5 +79,14 @@ router.put(
   ProductController.update
 );
 router.delete("/products/:id", authenticate, ProductController.delete);
+
+//Route for upload image and predict model
+router.post(
+  "/predict",
+  upload.single(
+    "image" /* name attribute of properties in your form-data request */
+  ),
+  ModelController.getPrediction
+);
 
 export default router;
