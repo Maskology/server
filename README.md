@@ -10,6 +10,18 @@
 npm install
 ```
 
+```sh
+npx prisma generate
+```
+
+```sh
+npx prisma db push
+```
+
+```sh
+npx prisma db seed
+```
+
 ## Usage
 
 ```sh
@@ -26,4 +38,3 @@ npm run dev
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
