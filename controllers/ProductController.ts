@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
+import _ from "lodash";
 
 const prisma = new PrismaClient();
 
@@ -23,9 +24,16 @@ export default class ProductController {
       take: limit,
       skip: startIndex,
       include: {
-        category: true,
-        store: true,
+        store: {
+          select: {
+            name: true,
+          },
+        },
       },
+    });
+
+    const resultWithStoreName = _.map(result, function (el) {
+      return _.extend({}, el, { storeName: el.store.name });
     });
 
     return res.status(200).json({
@@ -35,7 +43,7 @@ export default class ProductController {
         page: page,
         lastPage: totalPage,
       },
-      data: result,
+      data: _.map(resultWithStoreName, _.partial(_.omit, _, "store")),
     });
   }
 
