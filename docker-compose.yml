@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: maskology_pg_container
+    image: postgres:13.7-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: maskology
+      POSTGRES_PASSWORD: maskology
+      POSTGRES_DB: maskologyDB
+    volumes:
+      - "./tmp/db:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+
+  adminer:
+    container_name: maskology_adminer_container
+    depends_on:
+      - db
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
