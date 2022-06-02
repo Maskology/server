@@ -60,20 +60,17 @@ export default class CategoryController {
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
-    const { name, detail } = req.body;
+    const { ...category } = req.body;
 
     try {
-      const category = await prisma.category.update({
-        data: {
-          name,
-          detail,
-        },
+      const result = await prisma.category.update({
+        data: { ...category },
         where: {
           id: req.params.id,
         },
       });
 
-      res.status(200).json(category);
+      res.status(200).json(result);
     } catch (error) {
       next(error);
     }
