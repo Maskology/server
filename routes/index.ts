@@ -80,7 +80,7 @@ router.put(
 );
 router.delete("/products/:id", authenticate, ProductController.delete);
 
-//Route for upload image and predict model
+// Route for upload image and predict model
 router.post(
   "/predict",
   upload.single(
