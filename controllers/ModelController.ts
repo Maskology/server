@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import * as tf from "@tensorflow/tfjs-node";
 import { GraphModel } from "@tensorflow/tfjs-node";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
 // Import the model first
 // Refrence https://github.com/tensorflow/tfjs/issues/6019#issuecomment-1086427992
@@ -27,6 +29,7 @@ export default class ModelController {
         tensor.resizeBilinear(IMG_SIZE).expandDims(0)
       ) as tf.Tensor;
 
+      // Convert the prediction result to readable data.
       const predictionArray = Array.from(prediction.dataSync());
       const labels = [
         "barong",
@@ -51,8 +54,23 @@ export default class ModelController {
 
   static async getPrediction(req: Request, res: Response) {
     try {
-      const result = await ModelController.predict({ file: req.file });
-      return res.status(200).json({ result });
+      const predictionResult = await ModelController.predict({
+        file: req.file,
+      });
+      const highestPredictionValue = Math.max(
+        ...predictionResult.map((o) => o.value)
+      );
+      const highestPredictionObject = predictionResult.find(
+        (o) => o.value == highestPredictionValue
+      );
+      const result = await prisma.category.findUnique({
+        where: {
+          tags: highestPredictionObject?.label,
+        },
+      });
+      return res.status(200).json({
+        result: { ...result, predictionResult },
+      });
     } catch (error: any) {
       return res.status(400).json({ message: error.message });
     }

@@ -51,7 +51,7 @@ model Category {
   author    String
   source    String
   detail    String
-  tags      String
+  tags      String    @unique
   product   Product[]
 }
 
