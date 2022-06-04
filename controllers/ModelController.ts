@@ -3,6 +3,7 @@ import * as tf from "@tensorflow/tfjs-node";
 import { GraphModel } from "@tensorflow/tfjs-node";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import checkLabel from "../config/machineLearningLabel";
 
 // Import the model first
 // Refrence https://github.com/tensorflow/tfjs/issues/6019#issuecomment-1086427992
@@ -14,7 +15,10 @@ let model: GraphModel;
 export default class ModelController {
   static predict({ file }: { file: any }) {
     // Declare an input tensor for the model.
-    const IMG_SIZE = [280, 280] as [number, number];
+    const IMG_SIZE = [
+      Number(process.env.IMG_HEIGHT),
+      Number(process.env.IMG_WIDTH),
+    ] as [number, number];
 
     // Check the image type
     let pattern = /image\/(jpeg|png|jpg)/;
@@ -31,18 +35,12 @@ export default class ModelController {
 
       // Convert the prediction result to readable data.
       const predictionArray = Array.from(prediction.dataSync());
-      const labels = [
-        "barong",
-        "bujuh",
-        "dalem",
-        "keras",
-        "sidakarya",
-        "tua",
-      ].sort();
+      const labelsSource = checkLabel();
+      const labels = labelsSource?.label.sort();
 
       const predictionResult = predictionArray.map((prediction, index) => {
         return {
-          label: labels[index],
+          label: labels?.[index],
           value: prediction,
         };
       });
@@ -69,10 +67,10 @@ export default class ModelController {
         },
       });
       return res.status(200).json({
-        result: { ...result, predictionResult },
+        result: { ...result, raw: predictionResult },
       });
     } catch (error: any) {
-      return res.status(400).json({ message: error.message });
+      return res.status(500).json({ message: error.message });
     }
   }
 }
