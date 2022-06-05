@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { storage as gc } from "../config/";
+import { storage as gc } from "../config/storageConfig";
 import { nanoid } from "nanoid";
 
-export default class ProductController {
+export default class FileController {
   static async store(req: Request, res: Response, next: NextFunction) {
     try {
       const file = req.file;
