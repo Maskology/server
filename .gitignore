@@ -5,3 +5,4 @@ model
 model.zip
 tmp
 dist
+/config/keys.json
