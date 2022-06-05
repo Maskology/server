@@ -22,12 +22,6 @@ export const ValidateProduct = [
     .notEmpty()
     .withMessage("Name can't be empty")
     .bail(),
-  body("imageUrl")
-    .isURL()
-    .bail()
-    .notEmpty()
-    .withMessage("imageUrl can't be empty")
-    .bail(),
   body("stock")
     .isInt({ min: 0 })
     .bail()
