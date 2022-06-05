@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { Request, Response, NextFunction } from "express";
-// import multer from "multer";
+import multer from "multer";
 
 import AuthController from "../controllers/AuthController";
 import CategoryController from "../controllers/CategoryController";
 import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
-import ModelController from "../controllers/ModelController";
+import FileController from "../controllers/FileController";
+// import ModelController from "../controllers/ModelController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
 import { ValidateProduct } from "../validators/ProductValidator";
@@ -15,9 +16,17 @@ import { ValidateStore } from "../validators/StoreValidator";
 import { adminAuthorization, authenticate } from "../middleware/auth";
 
 const router = Router();
-// const upload = multer({
-//   storage: multer.memoryStorage(),
-// });
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
+
+router.post(
+  "/uploads",
+  authenticate,
+  upload.single("images"),
+  FileController.store
+);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).json({ message: "API OK!" });
