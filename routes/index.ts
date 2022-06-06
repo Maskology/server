@@ -7,7 +7,7 @@ import CategoryController from "../controllers/CategoryController";
 import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
 import FileController from "../controllers/FileController";
-import ModelController from "../controllers/ModelController";
+// import ModelController from "../controllers/ModelController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
 import { ValidateProduct } from "../validators/ProductValidator";
@@ -95,12 +95,12 @@ router.put(
 router.delete("/products/:id", authenticate, ProductController.delete);
 
 // Route for upload image and predict model
-router.post(
-  "/predict",
-  upload.single(
-    "image" /* name attribute of properties in your form-data request */
-  ),
-  ModelController.getPrediction
-);
+// router.post(
+//   "/predict",
+//   upload.single(
+//     "image" /* name attribute of properties in your form-data request */
+//   ),
+//   ModelController.getPrediction
+// );
 
 export default router;
