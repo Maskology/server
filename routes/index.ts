@@ -7,13 +7,14 @@ import CategoryController from "../controllers/CategoryController";
 import ProductController from "../controllers/ProductController";
 import StoreController from "../controllers/StoreController";
 import FileController from "../controllers/FileController";
-// import ModelController from "../controllers/ModelController";
+import ModelController from "../controllers/ModelController";
 
 import { ValidateCategory } from "../validators/CategoryValidator";
 import { ValidateProduct } from "../validators/ProductValidator";
 import { ValidateStore } from "../validators/StoreValidator";
 
 import { adminAuthorization, authenticate } from "../middleware/auth";
+import uploadGcp from "../middleware/upload";
 
 const router = Router();
 
@@ -24,7 +25,7 @@ const upload = multer({
 router.post(
   "/uploads",
   authenticate,
-  upload.single("images"),
+  upload.single("image"),
   FileController.store
 );
 
@@ -76,8 +77,12 @@ router.delete("/stores/:id", authenticate, StoreController.delete);
 router.get("/products", ProductController.get);
 router.post(
   "/products",
-  ValidateProduct,
   authenticate,
+  upload.single(
+    "image" /* name attribute of properties in your form-data request */
+  ),
+  ValidateProduct,
+  uploadGcp,
   ProductController.store
 );
 router.get("/products/:id", ProductController.show);
@@ -89,13 +94,13 @@ router.put(
 );
 router.delete("/products/:id", authenticate, ProductController.delete);
 
-//Route for upload image and predict model
-// router.post(
-//   "/predict",
-//   upload.single(
-//     "image" /* name attribute of properties in your form-data request */
-//   ),
-//   ModelController.getPrediction
-// );
+// Route for upload image and predict model
+router.post(
+  "/predict",
+  upload.single(
+    "image" /* name attribute of properties in your form-data request */
+  ),
+  ModelController.getPrediction
+);
 
 export default router;
