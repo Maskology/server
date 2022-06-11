@@ -23,18 +23,25 @@ export default class ProductController {
     const result = await prisma.product.findMany({
       take: limit,
       skip: startIndex,
+      where: { category: { tags: q.category?.toString() } },
       include: {
         store: {
           select: {
             name: true,
           },
         },
+        category: true,
       },
     });
 
     const resultWithStoreName = _.map(result, function (el) {
       return _.extend({}, el, { storeName: el.store.name });
     });
+
+    const resultWithoutStore = _.map(
+      resultWithStoreName,
+      _.partial(_.omit, _, "store")
+    );
 
     return res.status(200).json({
       meta: {
@@ -43,7 +50,7 @@ export default class ProductController {
         page: page,
         lastPage: totalPage,
       },
-      data: _.map(resultWithStoreName, _.partial(_.omit, _, "store")),
+      data: _.map(resultWithoutStore, _.partial(_.omit, _, "category")),
     });
   }
 
