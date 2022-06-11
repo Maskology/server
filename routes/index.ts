@@ -70,6 +70,7 @@ router.delete(
 router.get("/stores", StoreController.get);
 router.post("/stores", ValidateStore, authenticate, StoreController.store);
 router.get("/stores/:id", StoreController.show);
+router.get("/stores/:id/product", StoreController.showProduct);
 router.put("/stores/:id", ValidateStore, authenticate, StoreController.update);
 router.delete("/stores/:id", authenticate, StoreController.delete);
 

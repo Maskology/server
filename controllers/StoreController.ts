@@ -63,12 +63,21 @@ export default class StoreController {
       where: {
         id: req.params.id,
       },
+    });
+
+    return res.status(200).json(result);
+  }
+
+  static async showProduct(req: Request, res: Response, next: NextFunction) {
+    const result = await prisma.store.findUnique({
+      where: {
+        id: req.params.id,
+      },
       include: {
         product: true,
       },
     });
-
-    return res.status(200).json(result);
+    return res.status(200).json(result?.product ?? []);
   }
 
   static async update(req: Request, res: Response, next: NextFunction) {
