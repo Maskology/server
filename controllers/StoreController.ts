@@ -57,6 +57,9 @@ export default class StoreController {
       where: {
         id: req.params.id,
       },
+      include: {
+        product: true,
+      },
     });
 
     return res.status(200).json(result);
