@@ -88,8 +88,12 @@ router.post(
 router.get("/products/:id", ProductController.show);
 router.put(
   "/products/:id",
+  upload.single(
+    "image" /* name attribute of properties in your form-data request */
+  ),
   ValidateProduct,
   authenticate,
+  uploadGcp,
   ProductController.update
 );
 router.delete("/products/:id", authenticate, ProductController.delete);

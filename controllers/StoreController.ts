@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import * as argon2 from "argon2";
+import _ from "lodash";
 
 const prisma = new PrismaClient();
 
@@ -25,6 +26,11 @@ export default class StoreController {
       skip: startIndex,
     });
 
+    const resultWithoutPasword = _.map(
+      result,
+      _.partial(_.omit, _, "password")
+    );
+
     return res.status(200).json({
       meta: {
         total: totalData,
@@ -32,7 +38,7 @@ export default class StoreController {
         page: page,
         lastPage: totalPage,
       },
-      data: result,
+      data: resultWithoutPasword,
     });
   }
 
