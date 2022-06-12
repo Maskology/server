@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import dotenv from "dotenv";
+import cors from "cors"
 import route from "./routes";
 import { LoggingBunyan } from "@google-cloud/logging-bunyan";
 import bunyan from "bunyan";
@@ -12,6 +13,7 @@ try {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cors())
 
   app.use("/", route);
 
