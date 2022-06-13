@@ -68,7 +68,7 @@ router.delete(
 
 // Store
 router.get("/stores", StoreController.get);
-router.post("/stores", ValidateStore, authenticate, StoreController.store);
+router.post("/stores", ValidateStore, StoreController.store);
 router.get("/stores/:id", StoreController.show);
 router.get("/stores/:id/product", StoreController.showProduct);
 router.put("/stores/:id", ValidateStore, authenticate, StoreController.update);
